@@ -69,13 +69,15 @@
     }
     
     function removeTransition(e) {
-      if(e.propertyName !== 'transform') return; // skip it if it's not a transform
+      if(e.propertyName !== 'transform') return; // skip this .key node it if it's not a transform
       this.classList.remove('playing');
     }
     
-    const keys = document.querySelectorAll('.key');
-    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    // remove the 'playing' class so the key style will return to normal after being pressed
+    const keys = document.querySelectorAll('.key'); // get all '.key' nodes and store them in a variable
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition)); // loop through the '.key' nodes, adding an event listener to each
 
+    // FIRST STEP: listen for a key press. this triggers everything else
     window.addEventListener('keydown', playAudio);
   </script>
 
