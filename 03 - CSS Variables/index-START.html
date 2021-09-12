@@ -22,6 +22,26 @@
 
   <style>
 
+    /* CSS variables are declared on an element. here we're going to declare our variables on the highest
+    element in the HTML tree, the root, using the :root psuedo-class. :root matches the 'html' element,
+    but it's specificity is higher is CSS cascading rules. the root of the HTML tree; i.e. the very top */
+
+    :root {
+      --base: #ffc600; /* custom properties are declared using double-hyphens -- */
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing); /* use a CSS variables by using the var() function and passing the variable to it */
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,6 +65,21 @@
   </style>
 
   <script>
+    // how do we write JavaScript to UPDATE our CSS variables?
+    const inputs = document.querySelectorAll('.controls input')
+
+    function handleUpdate(e) {
+      // capture the element's suffix from its made-up data-sizing attribute. not all of our inputs have a suffix so
+      // add a logical OR || and set it to nothing (''). otherwise, it will be assigned 'undefined' when it evaluates
+      // that there is no data-sizing attribute for that input
+      const suffix = this.dataset.sizing || '';
+      // document.documentElement returns the root element of the document (ex. 'html')
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+    }
+
+    // listen for a change event on each of the inputs
+    inputs.forEach(input => input.addEventListener('change', handleUpdate)); // listen for a change
+    inputs.forEach(input => input.addEventListener('mousemove', handleUpdate)); // listen for a mousemove
   </script>
 
 </body>
