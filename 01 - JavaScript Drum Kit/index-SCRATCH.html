@@ -59,26 +59,25 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
   
   <script>
-    function playAudio(e) {
-      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); // PLAY THE SOUND: get audio element by its data key
-      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); // GET THE KEY, to animate the appropriate key
-      if(!audio) return; // CHECK IF APPLICABLE KEY IS PRESSED: stop the function from running all together
-      audio.currentTime = 0; // rewinds to the start, makes it play any time the key is struck
+    function playSound(e) {
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      if(!audio) return;
+      audio.currentTime = 0;
       audio.play();
       key.classList.add('playing');
     }
-    
-    function removeTransition(e) {
-      if(e.propertyName !== 'transform') return; // skip this .key node it if it's not a transform
+
+    function removeStyle(e) {
+      if(e.propertyName !== 'transform') return;
       this.classList.remove('playing');
     }
-    
-    // remove the 'playing' class so the key style will return to normal after being pressed
-    const keys = document.querySelectorAll('.key'); // get all '.key' nodes and store them in a variable
-    keys.forEach(key => key.addEventListener('transitionend', removeTransition)); // loop through the '.key' nodes, adding an event listener to each
 
-    // FIRST STEP: listen for a key press. this triggers everything else
-    window.addEventListener('keydown', playAudio);
+    const keys = document.querySelectorAll('.key');
+    console.log(keys);
+    keys.forEach(key => key.addEventListener('transitionend', removeStyle));
+
+    window.addEventListener('keydown', playSound)
   </script>
 
 </body>
