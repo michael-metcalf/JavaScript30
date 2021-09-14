@@ -27,7 +27,6 @@
     .panels {
       min-height: 100vh;
       overflow: hidden;
-      display: flex; /* get panels to line up side-by-side */
     }
 
     .panel {
@@ -45,12 +44,11 @@
       font-size: 20px;
       background-size: cover;
       background-position: center;
-      flex: 1; /* each .panel will even distribute the leftover space among other */
-      justify-content: center; /* centers the content in each panel left to right */
-      align-items: center; /* aligns the content in each panel top to bottom */
-      /* an HTML element can be both a flex container AND a flex item */
-      display: flex; /* 'enables' flex properties */
-      flex-direction: column; /* flex defaults to orienting items left to right, so we're making them display top to bottom */
+
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
     }
 
     .panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
@@ -61,23 +59,14 @@
 
     /* Flex Items */
     .panel > * {
-      /* add a border to see how all the panels are being affected by the CSS:
-      border: 1px solid red;
-      */
       margin: 0;
       width: 100%;
       transition: transform 0.5s;
-      flex: 1 0 auto; /* shorthand for: flex-grow flex-shrink flex-basis */
+      flex: 1 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-
-    .panel > *:first-child { transform: translateY(-100%); } /* first-child text goes up off top of screen */
-    .panel.open-active > *:first-child { transform: translateY(0); } /* bring first-child text back onto the screen with open-active class */
-    .panel > *:last-child { transform: translateY(100%); } /* last-child text goes down off bottom of screen */
-    .panel.open-active > *:last-child { transform: translateY(0); } /* bring last-child text back onto the screen with open-active class */
-
 
     .panel p {
       text-transform: uppercase;
@@ -127,21 +116,7 @@
   </div>
 
   <script>
-    const panels = document.querySelectorAll('.panel'); // get all the panels
 
-    function toggleOpen() {
-      this.classList.toggle('open');
-    }
-
-    function toggleActive(e) {
-      if(e.propertyName.includes('flex')) {
-        this.classList.toggle('open-active');
-      }
-    }
-
-    // add event listeners to each panel, one event listener per function/event
-    panels.forEach(panel => panel.addEventListener('click', toggleOpen)); 
-    panels.forEach(panel => panel.addEventListener('transitionend', toggleActive));
   </script>
 
 </body>
