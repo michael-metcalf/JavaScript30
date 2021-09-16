@@ -17,6 +17,67 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const cities = [] // an empty array within which to store our filters city/state date
+
+// fetch (similar to the axios library) returns a promise, which says 'something will eventually come back from this fetch'
+// the data that comes back from the fetch doesn't know what kind of data it is, it's a blob (the response?)
+// we must convert the blob of mystery data into json using the blob's .json() method
+fetch(endpoint) // use .then to work with the 'blob' of data that the promise returns
+  .then(blob => blob.json()) // .json returns yet another promise that must be handled with a .then
+  .then(data => cities.push(...data)); // use the spread operator to spread the 'data' array into individual arguments
+
+  // filter the user-typed input from the cities array into a subset
+  function findMatches(wordToMatch, cities) {
+    return cities.filter(place => {
+      // here we need to figure out if the city/state matches what was searched
+      // match a regex with each place in the cities array, but how do you pass a variable into a regex?
+      // like this:
+      // 'g' is the global flag; it will search the entire string.
+      // 'i' means 'insensitive', meaning the search will NOT be case sensitive
+      const regex = new RegExp(wordToMatch, 'gi'); 
+      return place.city.match(regex) || place.state.match(regex);
+    });
+  }
+
+  // have a function to add commas into the population number
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  // create a function to display the search results
+  // this will be called whenever the value of the search input is changed
+  function displayMatches() {
+    const matchArray = findMatches(this.value, cities);
+    // to create the HTML, loop over the matchArray
+    const html = matchArray.map(place => {
+      const regex = new RegExp(this.value, 'gi'); // put the search value into a regex variable
+      const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`); // replace that text with highlighted text
+      // you can return html in a template literal
+      const stateName = place.state.replace(regex, `<span class="hl">${this.value}</span>`);
+      return `
+        <li>
+          <span class="name">${cityName}, ${stateName}</span>
+          <span class="population">${numberWithCommas(place.population)}</span>
+        </li>
+      `
+    }).join(''); // map is going to return an array, so to get our result in a string, use .join('')
+
+    suggestions.innerHTML = html; // assign the mapped html to the innerHTML of elements with a .suggestions class
+  }
+
+  // GET YOUR DATA FIRST!
+  // GET YOUR FUNCTIONALITY IN PLACE
+  // THEN HOOK IT UP TO EVENT LISTENERS AS WELL AS CREATING THE NEEDED HTML
+
+  const searchInput = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+
+  // change event only fires when you go off the input (focus changes away from the input), not on keyup
+  searchInput.addEventListener('change', displayMatches);
+  // to fire the event upon keyup and update with each keystroke:
+  searchInput.addEventListener('keyup', displayMatches);
+
+  // EXTRA CHALLENGE: what other parts of the data can you use? Geolocation? etc.
 </script>
 </body>
 </html>
