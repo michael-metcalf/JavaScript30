@@ -7,59 +7,6 @@
 <body>
 <canvas id="draw" width="800" height="800"></canvas>
 <script>
-  const canvas = document.querySelector('#draw');
-  const ctx = canvas.getContext('2d'); // the context is what we actually draw on
-  canvas.width = window.innerWidth; // resize the canvas to be the size of the window
-  canvas.height = window.innerHeight;
-  ctx.strokeStyle = '#BADA55'; // defining some basics settings...
-  ctx.lineJoin = 'round';
-  ctx.lineCap = 'round';
-  ctx.lineWidth = 100;
-  // experiment with different blend modes: 
-  // ctx.globalCompositeOperation = 'multiply'
-
-  // dummy variables
-  let isDrawing = false; // a flag to tell us if we should draw (by clicking the mouse) or not (mouse is just moving,  not clicked)
-  let lastX = 0; // to et the ending coordinates for the line you're drawing
-  let lastY = 0;
-  let hue = 0;
-  let direction = true; // setting a flag
-
-  function draw(e) {
-    if(!isDrawing) return; // will stop fn from running if not moused down
-    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-    ctx.beginPath();
-    // start from
-    ctx.moveTo(lastX, lastY);
-    // go to
-    ctx.lineTo(e.offsetX, e.offsetY);
-    ctx.stroke();
-    [lastX, lastY] = [e.offsetX, e.offsetY]; // destructuring an array
-
-    hue++; // increment the hue to change the color
-    if(hue >= 360) {
-      hue = 0; // reset hue to 0 when it increments to 360
-    }
-
-    if(ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
-      direction = !direction; // flipping the direction
-    }
-    if(direction) {
-      ctx.lineWidth++;
-    } else {
-      ctx.lineWidth--; 
-    } 
-  }
-
-  // click and drag functionality
-  canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-  });
-  
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', () => isDrawing = false);
-  canvas.addEventListener('mouseout', () => isDrawing = false);
   
 </script>
 

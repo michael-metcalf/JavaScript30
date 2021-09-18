@@ -18,28 +18,71 @@
     }
 
     // Regular
+    console.log('hello');
 
-    // Interpolated
+    // Interpolated (interpolate means to insert or introduce between other elements or parts, use %s)
+    // you can also insert strings/values held in variable using ES6 backticks and template literals
+    console.log('Hello, I\'m a %s string', '💩');
 
-    // Styled
+    // Styled (using %c)
+    console.log('%c I am some great text', 'font-size: 50px; background: red; text-shadow: 10px 10px 0 blue');
 
-    // warning!
+    // warning! (also give a stack trace)
+    console.warn('OH NO!');
 
-    // Error :|
+    // Error :| (also give a stack trace)
+    console.error('Crap!');
 
     // Info
+    console.info('Crocodiles eat 3-4 people per year');
 
-    // Testing
+    // Testing (will only fire if something is wrong, you can test something without if statements)
+    const p = document.querySelector('p');
 
-    // clearing
+    console.assert(p.classList.contains('ouch'), 'That is wrong')
+
+    // clearing (make sure you don't put this in your JavaScript file :p )
+    // console.clear(); 
 
     // Viewing DOM Elements
+    console.log(p);
+    console.dir(p); // console.dir opens up the DOM element selected and show all properties and available methods for it
 
-    // Grouping together
+    // Grouping together (allows you to group logs together)
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`); // collapses the group by default
+      // console.group(`${dog.name}`); // this is the name of the group
+      console.log(`This is ${dog.name}`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+      console.groupEnd(`${dog.name}`); // denote the end of your group with groupEnd and the group's name
+    });
 
-    // counting
+    // counting (counts the number of times that value of the argument passed in has been used)
+    console.count('Mike');
+    console.count('Mike');
+    console.count('Wes');
+    console.count('Mike');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Mike');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Mike');
+    console.count('Wes');
+    console.count('Wes');
+    
+    // timing (time how long something takes, like an API call)
+    console.time('fetching data');
+    fetch('https://api.github.com/users/michael-metcalf')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      });
 
-    // timing
+    // table (take an array of objects and display them in an easy-to-read table format)
+    console.table(dogs);
 
   </script>
 </body>
