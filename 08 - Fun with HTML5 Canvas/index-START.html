@@ -9,9 +9,12 @@
 <script>
   const canvas = document.querySelector('#draw');
   const ctx = canvas.getContext('2d'); // the context is what we actually draw on
+
   canvas.width = window.innerWidth; // resize the canvas to be the size of the window
   canvas.height = window.innerHeight;
-  ctx.strokeStyle = '#BADA55'; // defining some basics settings...
+
+  // defining some basics settings...
+  ctx.strokeStyle = '#BADA55'; // selects color to use for lines and lines around shapes
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
   ctx.lineWidth = 100;
@@ -20,7 +23,7 @@
 
   // dummy variables
   let isDrawing = false; // a flag to tell us if we should draw (by clicking the mouse) or not (mouse is just moving,  not clicked)
-  let lastX = 0; // to et the ending coordinates for the line you're drawing
+  let lastX = 0; // to get the ending coordinates for the line you're drawing
   let lastY = 0;
   let hue = 0;
   let direction = true; // setting a flag
@@ -44,6 +47,7 @@
     if(ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
       direction = !direction; // flipping the direction
     }
+    
     if(direction) {
       ctx.lineWidth++;
     } else {
