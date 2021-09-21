@@ -7,6 +7,23 @@
 </head>
 <body>
 <script>
+  // listen for keyups on the window,
+  // store them in an array
+  // check the array to see if the items match the secret word/key sequence
+  // if they match, execute some function
+  const pressed = [];
+  const secretCode = 'wesbos';
+
+  window.addEventListener('keyup', (e) => {
+    pressed.push(e.key);
+    // cap the length of pressed arr: check the pressed arr for the length of the secret word from the end of the array
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+
+    if (pressed.join('').includes(secretCode)) {
+      console.log('DING DING!');
+      cornify_add();
+    }
+  })
 </script>
 </body>
 </html>
