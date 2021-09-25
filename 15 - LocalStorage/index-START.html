@@ -28,11 +28,96 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  // for items, first check localStorage for any items and JSON.parse them from their JSON.stringified state
+  // if there aren't items in localStorage yet, fall back to an empty array
+  const items = JSON.parse(localStorage.getItem('items')) || [];
 
+  function addItem(e) {
+    // we use preventDefault() on our 'submit' event (e), because by default...
+    // ...forms submit their data somewhere, usually a server, and refresh the page,
+    // and we don't want to the page to refresh so we use preventDefault()
+    e.preventDefault();
+    
+    // how do we get the 'text' value?
+    // grab the text from the input box
+    const text = (this.querySelector('[name=item]')).value;
+    const item = {
+      text, // <-- this is ES6 shorthand for text: text
+      done: false
+    }
+
+    // push the item into the items array
+    items.push(item);
+
+    populateList(items, itemsList);
+
+    // LOCAL STORAGE:
+    // save our items array to localStorage after we populate the list.
+    // the localStorage API has setItem(), getItem(), removeItem(), and clear() methods.
+    // the first arg is where we name the key in the localStorage key-value store.
+    // the second arg is the data we are storing at that key.
+    // localStorage is a key-value store, and so values must be strings.
+    // if we put our item object in the value, the browser will try and stringify it using...
+    // ...the toString() method, which will return '[object Object]'.
+    // to properly stringify the non-string data (the 'items' array), we must use JSON.stringify()
+    localStorage.setItem('items', JSON.stringify(items));
+
+    // 'this' is referring to a form element, which has a reest() method.
+    // the reset() method clears the input box
+    this.reset();
+  }
+
+  // now we need a function called populateList, which will create the HTML.
+  // it needs: the list of plate items ('items'), and a place to put the HTML.
+  // give 'plates' a default value of an empty array so that our function still works...
+  // ...even if it gets passed an empty items array.
+  // also, why are we calling our args 'plates' and 'plateList' instead of just...
+  // ...reaching out for the specific 'items' and 'itemsList' variables we've already defined?
+  // we do this so the function can be more resilient and we can pass in ANY array and list...
+  // ...that we want to in the future
+  function populateList(plates = [], plateList) {
+    // a map takes in an array of raw data and returns an array of some other data.
+    // in our case we're going to take in an OBJECT and return a STRING
+    plateList.innerHTML = plates.map((plate, i) => {
+      // 'for' and 'id' share the same value; that's how you link an input with its label
+      // the existence of a 'checked' attribute automatically checks the checkbox, no matter the value
+      // can you use a ternary operator in HTML? yes, via template literals
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''}>
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    }).join(''); // this join('') will take the array that map returns and make it one big string, which we need for innerHTML
+  }
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return; // skip this unless it's an input
+    console.log(e.target);
+    const el = e.target;
+    const index = el.dataset.index;
+    items[index].done = !items[index].done; // set the done property to the opposite of what it was, a toggle
+    localStorage.setItem('items', JSON.stringify(items)); // update localStorage...
+    populateList(items, itemsList); // ...and visually update what's on our page
+  }
+
+  // EVENT DELEGATION: 
+  // listen for a 'click' on a higher element, then inside the function that gets fired, check if what was
+  // clicked was actually the element we want
+  // i.e instead of entrusting an event directly to an element which may or may not exist,
+  // or is otherwise negligent, entrust that event to a different element that can then delegate it to
+  // the negligent element.
+  // i.e. adding an event listener onto an element that we KNOW will exist/the we can count on for whatever we need
+  // i.e. giving an event listener to a parent element who can then delegate it to one of its negligent child elements
+
+  // listen for 'submit', not 'click', so all your form submission bases are covered
+  // (i.e. someone could submit info by pressing ENTER instead of clicking...)
+  addItems.addEventListener('submit', addItem);
+  // do the EVENT DELEGATION, entrust the event listener to the <ul class="plates">
+  itemsList.addEventListener('click', toggleDone);
+  // upon page load, populate the list with all items from localStorage; this is how the page 'remembers' your items
+  populateList(items, itemsList);
 </script>
-
 
 </body>
 </html>
-
