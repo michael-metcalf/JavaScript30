@@ -6,6 +6,8 @@
 </head>
 <body>
 
+  <!-- we're going to listen for a 'mousemove' on our '.hero' and based on that we'll calculate
+  where to put the h1 text shadow  -->
   <div class="hero">
     <h1 contenteditable>🔥WOAH!</h1>
   </div>
@@ -35,6 +37,48 @@
   </style>
 
 <script>
+  const hero = document.querySelector('.hero');
+  const text = document.querySelector('h1');
+  const walk = 100; // 100px
+
+  function shadow(e) {
+    // get the width and height of the element we're hovering over:
+    // const width = hero.offsetWidth;
+    // const height = hero.offsetHeight;
+    const { offsetWidth: width, offsetHeight: height } = hero; // ES6 destructuring
+    let { offsetX: x, offsetY: y } = e;
+
+    // NORMALIZE THE X, Y COORDINATES ACROSS ELEMENTS:
+    // we need to normalize the x, y coordinates so that even if we're hovering over a child of the element our
+    // 'mousemove' event is set on ('.hero' -> 'h1'), the coordinates will be consistent.
+
+    // 'this' is what the eventListener listened on, e.target is what the event was triggered on 
+    if (this !== e.target) {
+      x = x + e.target.offsetLeft;
+      y = y + e.target.offsetTop;
+    };
+
+    // FIGURE OUT HOW FAR THE TEXT SHADOW SHOULD GO:
+    // we need something called a 'walk': how many pixels, at most, should a shadow be stretched
+    // if 100 is our walk, the 50 should be the highest we go, and -50 the lowest
+    const xWalk = Math.round(x / width * walk) - (walk / 2);
+    const yWalk = Math.round(y / height * walk) - (walk / 2);
+
+    // textShadow: offset-x | offset-y | blur-radius | color
+    text.style.textShadow = `
+    ${xWalk}px ${yWalk}px 0 rgba(255, 0, 0, 0.7),
+    ${xWalk * -1}px ${yWalk}px 0 rgba(0, 255, 0, 0.7),
+    ${yWalk}px ${xWalk * -1}px 0 rgba(0, 0, 255, 0.7),
+    ${yWalk * -1}px ${xWalk}px 0 rgba(255, 0, 255, 0.7)
+    `;
+  }
+
+  // even though we're listening for a 'mousemove' over 'hero', when we're hovered over any children inside the
+  // 'hero' element, we'll get the 'mousemove' information for that element.
+  hero.addEventListener('mousemove', shadow);
+
+  // you can use offsetX and offsetY to get the position of your cursor, but if an element has nested elements
+  // then you need to do some math to keep the coords consistent
 </script>
 </body>
 </html>
