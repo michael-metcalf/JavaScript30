@@ -48,23 +48,6 @@
 <script>
 const bands = ['The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil', 'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State', 'We Came as Romans', 'Counterparts', 'Oh, Sleeper', 'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'];
 
-// we'll create a separate function that strips the article from the band name.
-// in regex, a ^ means 'starts with'.
-// our regex translates to 'starts with a OR the OR an , case insensitive'
-function strip(bandName) {
-  // replace the regex matches with nothing ('') and trim the whitespace from the ends
-  return bandName.replace(/^(a |the |an )/i, '').trim();
-}
-
-const sortedBands = bands.sort((a, b) => (strip(a) > strip(b)) ? 1 : -1);
-
-const bandList = document.querySelector('#bands');
-
-bandList.innerHTML = 
-  sortedBands
-  .map(band => `<li>${band}</li>`)
-  .join(''); // use join to join all the <li> elements into one big string (?)
-
 </script>
 
 </body>
