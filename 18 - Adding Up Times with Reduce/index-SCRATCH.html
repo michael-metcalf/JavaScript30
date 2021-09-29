@@ -182,40 +182,6 @@
     </li>
   </ul>
 <script>
-// How do we:
-// PULL THE TIMES OUT OF THE DOM,
-// CONVERT THE TIME STRINGS TO NUMBERS,
-// MAKE THEM INTO MINUTES AND SECONDS,
-// ADD THEM UP,
-// SEE THE TOTAL TIME IN HRS, MINS, SECS,
-// AND CONSOLE.LOG THOSE VALUES?
-
-// first, select all nodes with the data-time attribute.
-// we will get a NodeList, which we want to convert into an array so we can work with it,
-// either by using the spread operator to spread the items out into an array, or the Array.from() method:
-
-const timeNodes = [...document.querySelectorAll('[data-time]')];
-
-// Converting to an array using Array.from():
-// const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
-
-const seconds = timeNodes
-  .map(node => node.dataset.time) // get the time string from the list of <li> elements
-  .map(timeCode => {
-    // ES6 destructuring to get the minutes and seconds, but we'll need to run parseFloat on them to convert them from strings to numbers
-    const [mins, secs] = timeCode.split(':').map(parseFloat); // you can pass a function directly into map to call that function upon each item
-    return (mins * 60) + secs;  
-  })
-  .reduce((total, vidSeconds) => total + vidSeconds); // use reduce to get the total seconds
-
-  let secondsLeft = seconds;
-  const hours = Math.floor(seconds / 3600);
-  secondsLeft = secondsLeft % 3600;
-
-  const mins = Math.floor(secondsLeft / 60);
-  secondsLeft = secondsLeft % 60;
-  
-  console.log(hours, mins, secondsLeft);
 </script>
 </body>
 </html>
